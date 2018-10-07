@@ -4,25 +4,30 @@ import * as data from './swagger-contract.json'
 const dataNew = {...data['default']}
 console.warn(dataNew)
 
+const getDataFromPath = (path) => {
+  return "fuck"
+}
+
 const parser = (data) => {
   const paths = {...data.paths}
   const definitions = {...data.definitions}
   const result = Object.keys(paths).reduce((acc, elem) => {
     const current = {...paths[elem]["get"]}
-    console.log(!current.parameters)
     if (!current.parameters) {
       return acc
     }
     const params = current.parameters.reduce((result, element) => {
       let obj = {}
       obj[element.name] = Object.keys(element)
-        .filter((elem) => {
-          return (elem !== "name") && (elem !== "in")
-        })
         .reduce((acc, elem) => {
-          let obj = {}
-          obj[elem] = element[elem]
-          return {...acc, ...obj}
+          if ((elem === "name") || (elem === "in")) {
+            return acc
+          } else if (elem === "schema") {
+            const data = getDataFromPath(element.schema["$ref"])
+            console.error(data)
+            return acc
+          }
+          return {...acc, [`${elem}`]: element[elem]}
         }, {})
       return {...result, ...obj}
     }, {})
@@ -33,3 +38,5 @@ const parser = (data) => {
 }
 
 console.warn(parser(dataNew))
+
+
