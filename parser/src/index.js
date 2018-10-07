@@ -15,7 +15,15 @@ const parser = (data) => {
     }
     const params = current.parameters.reduce((result, element) => {
       let obj = {}
-      obj[element.name] = {...element}
+      obj[element.name] = Object.keys(element)
+        .filter((elem) => {
+          return (elem !== "name") && (elem !== "in")
+        })
+        .reduce((acc, elem) => {
+          let obj = {}
+          obj[elem] = element[elem]
+          return {...acc, ...obj}
+        }, {})
       return {...result, ...obj}
     }, {})
     return {...acc, ...params}
