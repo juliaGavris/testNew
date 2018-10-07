@@ -2,7 +2,6 @@ import * as data from './swagger-contract.json'
 
 
 const dataNew = {...data['default']}
-console.warn(dataNew)
 
 const getDataFromPath = (path) => {
   const section = path.split("definitions/")[1]
@@ -33,7 +32,6 @@ const parser = (data) => {
     }, {})
     return {...acc, ...params}
   }, {})
-  console.log(result)
   return result
 }
 
