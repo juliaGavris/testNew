@@ -5,12 +5,13 @@ const dataNew = {...data['default']}
 console.warn(dataNew)
 
 const getDataFromPath = (path) => {
-  return "fuck"
+  const section = path.split("definitions/")[1]
+  const obj = {...dataNew.definitions[section]["properties"]}
+  return obj
 }
 
 const parser = (data) => {
   const paths = {...data.paths}
-  const definitions = {...data.definitions}
   const result = Object.keys(paths).reduce((acc, elem) => {
     const current = {...paths[elem]["get"]}
     if (!current.parameters) {
@@ -24,8 +25,7 @@ const parser = (data) => {
             return acc
           } else if (elem === "schema") {
             const data = getDataFromPath(element.schema["$ref"])
-            console.error(data)
-            return acc
+            return {...acc, schema: data}
           }
           return {...acc, [`${elem}`]: element[elem]}
         }, {})
